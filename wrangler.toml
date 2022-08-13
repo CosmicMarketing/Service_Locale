@@ -1,6 +1,6 @@
 name = "locale"
 
 compatibility_date = "2022-07-28"
-workers_dev = true
+workers_dev = false
 
 main = "./index.js"
