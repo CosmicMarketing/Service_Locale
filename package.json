@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/CosmicMarketing/Service_Locale#readme",
   "dependencies": {
-    "country-locale-map": "^1.8.4",
-    "iso-country-currency": "https://github.com/jjjrmy/country-locale-map.git"
+    "country-locale-map": "https://github.com/jjjrmy/country-locale-map.git",
+    "iso-country-currency": "^0.6.0"
   }
 }
