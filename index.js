@@ -5,6 +5,8 @@ addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request));
 });
 
+const replaceAttribute = 'data-replace';
+
 async function handleRequest(request) {
     const response = await fetch(request);
     const contentType = response.headers.get('Content-Type');
@@ -18,7 +20,7 @@ async function handleRequest(request) {
     const countryLocale = { ...clm.getCountryByAlpha2(cf.country), ...getAllInfoByISO(cf.country)};
     const locale = countryLocale.default_locale.replace('_','-');
 
-    const replace = {
+    const replaceFields = {
         siteCurrent: null,
         timezone: cf.timezone,
         dateToday: dateToday.toLocaleDateString('en-US'),
@@ -42,16 +44,20 @@ async function handleRequest(request) {
         langBrowser: response.headers.get('Accepted-Language'),
     };
 
-    return new HTMLRewriter().on('[data-replace]', new ReplaceData(replace)).transform(response);
+    return new HTMLRewriter().on(`[${replaceAttribute}]`, new ReplaceData(replaceFields, replaceAttribute)).transform(response);
 }
 
 class ReplaceData {
-    constructor(replace) {
-        this.replace = replace;
+    constructor(fields, attribute) {
+        this.fields = fields;
+        this.attribute = attribute;
     }
     element(element) {
-        if (element.hasAttribute('data-replace')) {
-            element.setInnerContent(this.replace[element.getAttribute('data-replace')] ?? null);
+        if (
+            element.hasAttribute(this.attribute)
+            && this.fields.hasOwnProperty(element.getAttribute(this.attribute))
+        ) {
+            element.setInnerContent(this.fields[element.getAttribute(this.attribute)]);
         }
     }
 }
