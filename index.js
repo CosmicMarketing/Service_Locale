@@ -13,6 +13,7 @@ async function handleRequest(request) {
 
     if (!contentType.startsWith('text/html')) return response;
 
+    const url = new URL(request.url);
     const cf = request.cf;
     const dateToday = new Date();
     const dateTomorrow = new Date(dateToday + (3600 * 1000 * 24))
@@ -21,7 +22,7 @@ async function handleRequest(request) {
     const locale = countryLocale.default_locale.replace('_','-');
 
     const replaceFields = {
-        siteCurrent: null,
+        siteDomain: url.hostname,
         timezone: cf.timezone,
         dateToday: dateToday.toLocaleDateString('en-US'),
         dateTodayLocal: dateToday.toLocaleDateString(locale), // countryLocal.dateFormat
